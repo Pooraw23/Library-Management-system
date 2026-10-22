@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Library Management System - DBMS Project</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <!-- Injected dynamically by api.js setupNavbar -->
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Smart Library Management System</h1>
+      <p>A modernized academic circulation and cataloging platform engineered for college database management systems (DBMS). Search books, manage borrowings, inspect due dates, and track fines with relational integrity.</p>
+      
+      <form id="hero-search-form" class="hero-search">
+        <input type="text" id="hero-search-input" placeholder="Search by title, author, category, or ISBN..." autocomplete="off">
+        <button type="submit" class="btn btn-primary">Search Catalog</button>
+      </form>
+    </section>
+
+    <!-- Library Live Stats -->
+    <div class="page-header" style="margin-bottom: 1rem;">
+      <div>
+        <h2 class="page-title" style="font-size: 1.4rem;">Library Overview & Circulation Pulse</h2>
+        <p class="page-subtitle">Real-time statistics across academic collections and member circulation</p>
+      </div>
+    </div>
+    <div id="index-stats" class="grid grid-cols-4" style="margin-bottom: 2.5rem;">
+      <!-- Populated dynamically by index.js -->
+      <div class="stat-card">
+        <div class="stat-icon">📖</div>
+        <div class="stat-info"><div class="stat-value">...</div><div class="stat-label">Catalog Titles</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-info"><div class="stat-value">...</div><div class="stat-label">Physical Copies</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info"><div class="stat-value">...</div><div class="stat-label">Active Members</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-info"><div class="stat-value">...</div><div class="stat-label">Overdue Loans</div></div>
+      </div>
+    </div>
+
+    <!-- Featured Books Section -->
+    <div class="page-header" style="margin-bottom: 1rem;">
+      <div>
+        <h2 class="page-title" style="font-size: 1.4rem;">Featured Academic Titles</h2>
+        <p class="page-subtitle">Essential textbooks and reference materials in computer science and engineering</p>
+      </div>
+      <a href="/books.html" class="btn btn-outline btn-sm">Explore Full Catalog &rarr;</a>
+    </div>
+
+    <div id="featured-books-grid" class="grid grid-cols-3" style="margin-bottom: 2.5rem;">
+      <!-- Populated dynamically by index.js -->
+      <div style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 2rem;">Loading featured books...</div>
+    </div>
+
+    <!-- System Key Features -->
+    <div class="card" style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+      <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">System Capabilities & Features</h3>
+      <div class="grid grid-cols-3" style="gap: 1.25rem; margin-top: 1rem;">
+        <div>
+          <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 0.35rem;">📚 Direct Borrow & Return</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Students can borrow available books directly, inspect due dates, and return books anytime with instant inventory updates.
+          </p>
+        </div>
+        <div>
+          <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 0.35rem;">⚡ Real-Time Circulation</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Track book copies, place queue reservations when copies are out of stock, and calculate overdue fines at ₹2.00/day.
+          </p>
+        </div>
+        <div>
+          <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 0.35rem;">🛡️ Role-Based Portals</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Dedicated dashboards for student members to track active loans and administrators to manage catalog collections.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <p><strong>Smart Library Management System</strong> • College DBMS Project</p>
+      <p style="margin-top: 0.25rem; font-size: 0.8rem; color: #94a3b8;">Built with Python Flask, PostgreSQL / Psycopg2, and Vanilla JavaScript.</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/index.js"></script>
+</body>
+</html>

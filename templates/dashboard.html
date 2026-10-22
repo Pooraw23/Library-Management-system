@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Dashboard - Smart Library Management System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container"></div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Member Circulation Dashboard</h1>
+        <p class="page-subtitle">Welcome back, <strong id="member-welcome-name">Member</strong>. Track your active loans, due dates, reservations, and outstanding fines.</p>
+      </div>
+      <div>
+        <a href="/books.html" class="btn btn-primary btn-sm">Browse Catalog & Borrow</a>
+      </div>
+    </div>
+
+    <!-- Quick Stat Widgets -->
+    <div class="grid grid-cols-4" style="margin-bottom: 2.5rem;">
+      <div class="stat-card">
+        <div class="stat-icon">📖</div>
+        <div class="stat-info">
+          <div id="stat-active-issues" class="stat-value">0 / 3</div>
+          <div class="stat-label">Active Loans (Limit: 3)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-info">
+          <div id="stat-overdue-count" class="stat-value">0</div>
+          <div class="stat-label">Overdue Loans</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-info">
+          <div id="stat-reservations-count" class="stat-value">0</div>
+          <div class="stat-label">Pending Holds</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💵</div>
+        <div class="stat-info">
+          <div id="stat-unpaid-fines" class="stat-value">₹0.00</div>
+          <div class="stat-label">Outstanding Fines</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Active Borrowed Books -->
+    <div class="card" style="margin-bottom: 2.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700;">My Active Borrowed Books</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Highlighted in red if passed due date (₹2.00/day fine applies)</p>
+        </div>
+        <span class="badge badge-primary">Max 3 Concurrent Books</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width: 26%;">Book Title</th>
+              <th style="width: 14%;">Copy ID</th>
+              <th style="width: 13%;">Issue Date</th>
+              <th style="width: 13%;">Due Date</th>
+              <th style="width: 18%;">Status</th>
+              <th style="width: 16%;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="issued-books-tbody">
+            <tr><td colspan="6" style="text-align:center; padding:1.5rem; color:#64748b;">Loading issued books...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 2: Return History & Completed Loans -->
+    <div class="card" style="margin-bottom: 2.5rem;">
+      <div style="margin-bottom: 1rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700;">My Return History & Past Loans</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Record of books you have returned, displaying exact recorded return dates</p>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width: 26%;">Book Title</th>
+              <th style="width: 14%;">Copy ID</th>
+              <th style="width: 13%;">Issue Date</th>
+              <th style="width: 13%;">Due Date</th>
+              <th style="width: 16%;">Return Date</th>
+              <th style="width: 18%;">Return Status</th>
+            </tr>
+          </thead>
+          <tbody id="returned-books-tbody">
+            <tr><td colspan="6" style="text-align:center; padding:1.5rem; color:#64748b;">Loading return history...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 2: Active Reservations -->
+    <div class="card" style="margin-bottom: 2.5rem;">
+      <div style="margin-bottom: 1rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700;">My Book Reservations & Queue</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Titles reserved when zero copies were in stock</p>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width: 45%;">Reserved Title</th>
+              <th style="width: 25%;">Reserved At</th>
+              <th style="width: 15%;">Queue Status</th>
+              <th style="width: 15%;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="reservations-tbody">
+            <tr><td colspan="4" style="text-align:center; padding:1.5rem; color:#64748b;">Loading reservations...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 3: Fines & Settlement -->
+    <div class="card">
+      <div style="margin-bottom: 1rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700;">Fines & Settlement (₹2.00/day)</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Incurred on overdue returns as modeled in the DBMS ER diagram</p>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width: 28%;">Book & Copy</th>
+              <th style="width: 22%;">Due Date → Return Date</th>
+              <th style="width: 16%;">Fine Amount</th>
+              <th style="width: 16%;">Payment Status</th>
+              <th style="width: 18%;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="fines-tbody">
+            <tr><td colspan="5" style="text-align:center; padding:1.5rem; color:#64748b;">Loading fine records...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Pay Fine Modal -->
+  <div id="modal-pay-fine" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Settle Library Fine</h3>
+        <button id="btn-close-pay-modal" class="modal-close">&times;</button>
+      </div>
+      <form id="form-pay-fine">
+        <div class="modal-body">
+          <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:1rem;">
+            Current outstanding balance: <strong id="pay-fine-balance" style="color:#ef4444;">₹0.00</strong>
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="pay-fine-amount">Payment Amount (₹)</label>
+            <input type="number" step="0.50" min="0.50" id="pay-fine-amount" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>Smart Library Management System • DBMS Project</p>
+  </footer>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

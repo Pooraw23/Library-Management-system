@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Catalogue - Smart Library Management System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container"></div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Book Catalogue & Search</h1>
+        <p class="page-subtitle">Browse textbooks, research monographs, and reference publications across engineering domains</p>
+      </div>
+      <div id="books-count" style="font-weight: 600; color: var(--text-muted); align-self: flex-end;"></div>
+    </div>
+
+    <!-- Search & Filters Container -->
+    <div class="card" style="padding: 1rem 1.25rem; margin-bottom: 2rem;">
+      <div class="search-bar-container" style="margin-bottom: 0;">
+        <div class="search-input-wrap">
+          <input type="text" id="books-search-input" class="form-control" placeholder="Search by title, ISBN, author name..." autocomplete="off">
+        </div>
+        <div class="category-filter">
+          <select id="books-category-select" class="form-control">
+            <option value="">All Categories</option>
+            <!-- Categories injected by books.js -->
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div id="books-grid" class="grid grid-cols-3">
+      <!-- Injected by books.js -->
+    </div>
+  </main>
+
+  <footer>
+    <p>Smart Library Management System • DBMS Project</p>
+  </footer>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/books.js"></script>
+</body>
+</html>

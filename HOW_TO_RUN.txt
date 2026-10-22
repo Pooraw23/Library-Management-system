@@ -1,0 +1,50 @@
+================================================================================
+   SMART LIBRARY MANAGEMENT SYSTEM - HOW TO RUN FOR TEAMMATES
+================================================================================
+
+1. THE FASTEST WAY (1-CLICK RUN):
+   -> Simply DOUBLE-CLICK "run.bat"
+   -> That's it! A command window will open, install any missing Python packages
+      automatically, and open the website in your browser:
+      http://localhost:5000
+
+   * NOTE: Keep the black command window OPEN while browsing the website!
+     To close the server when you are done, close the window or press Ctrl + C.
+
+--------------------------------------------------------------------------------
+2. DEMO LOGIN CREDENTIALS:
+   You can click the 1-click login buttons on the Login page, or enter:
+
+   A) ADMINISTRATOR / LIBRARIAN:
+      - Email:    admin@library.edu
+      - Password: admin123
+      (Can view all books, add copies, issue/return books, see all fines)
+
+   B) STUDENT MEMBER:
+      - Email:    john.doe@student.edu
+      - Password: member123
+      (Can borrow books, reserve books, see personal loans and fines in ₹)
+
+--------------------------------------------------------------------------------
+3. WHAT IF POSTGRESQL IS NOT INSTALLED ON YOUR MACHINE?
+   -> NO PROBLEM AT ALL!
+   -> The application has an automatic fallback. If PostgreSQL is not found,
+      it runs in High-Speed In-Memory Mock Mode with all 6 books, copies,
+      authors, borrowing, and fines pre-loaded.
+   -> The website works 100% identically!
+
+--------------------------------------------------------------------------------
+4. WHAT IF YOU HAVE POSTGRESQL INSTALLED ON YOUR MACHINE?
+   -> If you want to connect your local PostgreSQL database:
+      Open PowerShell or Terminal in this folder and run:
+         python init_db.py your_postgres_password
+
+      This will automatically create "library_db" on your machine, run all SQL
+      tables and seed data, and connect the app!
+
+--------------------------------------------------------------------------------
+5. PREREQUISITE:
+   -> Python 3.10 or newer (download from https://www.python.org/ if needed).
+   -> When installing Python on Windows, make sure to CHECK the box:
+      [✓] "Add python.exe to PATH"
+================================================================================

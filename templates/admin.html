@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin & Librarian Portal - Smart Library Management System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container"></div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Administrative & Circulation Management</h1>
+        <p class="page-subtitle">Full control over academic collections, member accounts, loan circulation, and financial dues</p>
+      </div>
+      <div>
+        <span class="badge badge-primary" style="font-size:0.9rem; padding:0.4rem 0.8rem;">Staff Portal Access</span>
+      </div>
+    </div>
+
+    <!-- Administrative Quick Stat Bar -->
+    <div class="grid grid-cols-4" style="margin-bottom: 2rem;">
+      <div class="stat-card">
+        <div class="stat-icon">📖</div>
+        <div class="stat-info">
+          <div id="stat-admin-books" class="stat-value">...</div>
+          <div class="stat-label">Catalog Titles</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-info">
+          <div id="stat-admin-copies" class="stat-value">...</div>
+          <div class="stat-label">Physical Inventory</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info">
+          <div id="stat-admin-members" class="stat-value">...</div>
+          <div class="stat-label">Enrolled Members</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-info">
+          <div id="stat-admin-overdue" class="stat-value">...</div>
+          <div class="stat-label">Overdue Loans</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="circulation">🔄 Circulation Desk (Issue & Return)</button>
+      <button class="tab-btn" data-tab="catalog">📚 Catalog & Inventory</button>
+      <button class="tab-btn" data-tab="members">👥 Members Directory</button>
+      <button class="tab-btn" data-tab="fines">💰 Fines & Payments</button>
+      <button class="tab-btn" data-tab="history">📋 Full Circulation History</button>
+    </div>
+
+    <!-- TAB 1: CIRCULATION DESK (Issue & Return) -->
+    <div id="tab-circulation" class="tab-content active">
+      <div class="grid grid-cols-3" style="gap: 1.5rem; margin-bottom: 2rem;">
+        
+        <!-- Issue Book Form -->
+        <div class="card" style="grid-column: span 1; border-top: 4px solid var(--primary);">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Issue Book Copy</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Loan an available book copy to an active library member.
+          </p>
+
+          <form id="form-issue-book">
+            <div class="form-group">
+              <label class="form-label" for="issue-member-select">Select Member</label>
+              <select id="issue-member-select" class="form-control" required>
+                <option value="">Loading members...</option>
+              </select>
+              <small style="color:var(--text-muted); font-size:0.75rem;">Limit: Maximum 3 active books per member</small>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="issue-copy-select">Select Available Copy</label>
+              <select id="issue-copy-select" class="form-control" required>
+                <option value="">Loading copies...</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-2" style="gap: 0.75rem;">
+              <div class="form-group">
+                <label class="form-label" for="issue-date">Issue Date</label>
+                <input type="date" id="issue-date" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="issue-due-date">Due Date</label>
+                <input type="date" id="issue-due-date" class="form-control">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">Issue Book</button>
+          </form>
+        </div>
+
+        <!-- Active Loans & Return Table -->
+        <div class="card" style="grid-column: span 2;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700;">Active Borrowings (Pending Returns)</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Overdue books highlighted in red. Process return with 1-click.</p>
+            </div>
+            <span class="badge badge-warning">Active Circulation</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Issue #</th>
+                  <th>Member</th>
+                  <th>Book & Copy</th>
+                  <th>Issued</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="active-issues-tbody">
+                <tr><td colspan="7" style="text-align:center; padding:1.5rem; color:#64748b;">Loading active loans...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: CATALOG & INVENTORY MANAGEMENT -->
+    <div id="tab-catalog" class="tab-content">
+      <div class="grid grid-cols-3" style="gap: 1.5rem; margin-bottom: 2rem;">
+        
+        <!-- Add Book Form -->
+        <div class="card" style="grid-column: span 2;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Register New Book in Catalog</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Registers textbook metadata and generates the first available physical copy automatically.
+          </p>
+
+          <form id="form-add-book">
+            <div class="grid grid-cols-2" style="gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label" for="new-book-title">Book Title</label>
+                <input type="text" id="new-book-title" class="form-control" placeholder="e.g. Distributed Operating Systems" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="new-book-isbn">ISBN Number</label>
+                <input type="text" id="new-book-isbn" class="form-control" placeholder="e.g. 978-0133805918" required>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3" style="gap: 1rem;">
+              <div class="form-group">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <label class="form-label" for="new-book-category">Category</label>
+                  <button type="button" id="btn-open-category-modal" style="background:none; border:none; color:var(--primary); font-size:0.75rem; cursor:pointer; font-weight:600;">+ New</button>
+                </div>
+                <select id="new-book-category" class="form-control" required>
+                  <option value="">Select category...</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="new-book-publisher">Publisher</label>
+                <input type="text" id="new-book-publisher" class="form-control" placeholder="e.g. Pearson">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="new-book-year">Publication Year</label>
+                <input type="number" id="new-book-year" class="form-control" placeholder="e.g. 2022">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                <label class="form-label" style="margin-bottom:0;">Authors</label>
+                <button type="button" id="btn-open-author-modal" style="background:none; border:none; color:var(--primary); font-size:0.75rem; cursor:pointer; font-weight:600;">+ New Author</button>
+              </div>
+              <div id="new-book-authors-list" style="max-height: 120px; overflow-y: auto; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: #f8fafc;">
+                <!-- Author checkboxes injected by admin.js -->
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">Save Book to Catalog</button>
+          </form>
+        </div>
+
+        <!-- Add Copy Form -->
+        <div class="card" style="grid-column: span 1;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Add Physical Copy</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Add an inventory copy for a book (auto-assigns Copy ID).
+          </p>
+
+          <form id="form-add-copy-admin">
+            <div class="form-group">
+              <label class="form-label" for="copy-book-select">Select Catalog Book</label>
+              <select id="copy-book-select" class="form-control" required>
+                <option value="">Select book...</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-outline" style="width:100%; margin-top:0.5rem;">+ Add Copy to Inventory</button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Book Catalog Table -->
+      <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Complete Books Catalog</h3>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 8%;">ID</th>
+                <th style="width: 32%;">Title</th>
+                <th style="width: 15%;">ISBN</th>
+                <th style="width: 15%;">Category</th>
+                <th style="width: 15%;">Authors</th>
+                <th style="width: 10%;">Copies</th>
+                <th style="width: 5%;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-books-tbody">
+              <tr><td colspan="7" style="text-align:center; padding:1.5rem; color:#64748b;">Loading catalog...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: MEMBERS DIRECTORY -->
+    <div id="tab-members" class="tab-content">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700;">Library Members Directory</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Registered students, faculty, and administrative staff</p>
+          </div>
+          <span class="badge badge-primary">Institutional Records</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Member #</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Enrolled On</th>
+                <th>Active Loans</th>
+                <th>Unpaid Fines</th>
+              </tr>
+            </thead>
+            <tbody id="admin-members-tbody">
+              <tr><td colspan="8" style="text-align:center; padding:1.5rem; color:#64748b;">Loading members directory...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: FINES & PAYMENTS -->
+    <div id="tab-fines" class="tab-content">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700;">Circulation Fines & Revenue Collection</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Automated overdue penalties (₹2.00/day) and payments</p>
+          </div>
+          <span class="badge badge-success">Financial Integrity</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Fine #</th>
+                <th>Member</th>
+                <th>Book & Copy</th>
+                <th>Period</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Balance</th>
+                <th>Status & Payment</th>
+              </tr>
+            </thead>
+            <tbody id="admin-fines-tbody">
+              <tr><td colspan="8" style="text-align:center; padding:1.5rem; color:#64748b;">Loading fines...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: FULL CIRCULATION HISTORY -->
+    <div id="tab-history" class="tab-content">
+      <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Complete Circulation Audit Trail</h3>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Issue #</th>
+                <th>Member</th>
+                <th>Book & Copy ID</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="all-issues-tbody">
+              <tr><td colspan="7" style="text-align:center; padding:1.5rem; color:#64748b;">Loading circulation audit trail...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Quick Add Category Modal -->
+  <div id="modal-add-category" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Create Book Category</h3>
+        <button id="btn-close-cat-modal" class="modal-close">&times;</button>
+      </div>
+      <form id="form-add-category">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="new-category-name">Category Name</label>
+            <input type="text" id="new-category-name" class="form-control" placeholder="e.g. Cloud Computing & Distributed Systems" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Create Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Quick Add Author Modal -->
+  <div id="modal-add-author" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Author Profile</h3>
+        <button id="btn-close-auth-modal" class="modal-close">&times;</button>
+      </div>
+      <form id="form-add-author">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="new-author-name">Author Name</label>
+            <input type="text" id="new-author-name" class="form-control" placeholder="e.g. Donald E. Knuth" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Author</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Record Payment Modal -->
+  <div id="modal-admin-pay-fine" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Record Fine Payment</h3>
+        <button id="btn-close-admin-pay-modal" class="modal-close">&times;</button>
+      </div>
+      <form id="form-admin-pay-fine">
+        <div class="modal-body">
+          <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:0.75rem;">
+            Member: <strong id="admin-pay-member-name"></strong>
+          </p>
+          <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:1rem;">
+            Remaining Balance Due: <strong id="admin-pay-balance" style="color:#ef4444;">₹0.00</strong>
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="admin-pay-amount">Amount Received (₹)</label>
+            <input type="number" step="0.50" min="0.50" id="admin-pay-amount" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Record Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>Smart Library Management System • DBMS Project</p>
+  </footer>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/admin.js"></script>
+</body>
+</html>
