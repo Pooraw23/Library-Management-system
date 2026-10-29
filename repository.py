@@ -10,10 +10,6 @@ import mock_data
 if not Config.USE_DB:
     mock_data.reset_mock_data()
 
-# -------------------------------------------------------------------------
-# Helper Functions
-# -------------------------------------------------------------------------
-
 def to_json_serializable(val):
     """Recursively convert Dates, Datetimes, and Decimals to JSON-friendly primitives."""
     if isinstance(val, (datetime.date, datetime.datetime)):
