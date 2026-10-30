@@ -160,7 +160,7 @@ INSERT INTO book_copies (copy_id, book_id, status) VALUES
 
 -- Insert Students & Staff (Passwords: admin123, librarian123, member123)
 INSERT INTO students (student_id, name, email, password_hash, role, department) VALUES
-(1, 'System Administrator', 'admin@library.edu', 'scrypt:32768:8:1$6mPlyQ14zQwmbezy$1e458c9cae1e42a6aed16b10d8673ad36ad55d3c1e4c0a0fde670dcdcca0d965a5d951ee796ee5d68322fe649ea936cc4ee04e37e97294f534688be16ec7b5ec', 'admin', 'Administration'),
+(1, 'System Administrator', 'admin@library.edu', 'c', 'admin', 'Administration'),
 (2, 'Eleanor Vance', 'librarian@library.edu', 'scrypt:32768:8:1$fpwoua8rWbshcS6S$509269e256446ec7f8f4db8a1d1b02000e8eba06161af509f31ebcfeb745c82f84fd054158785bbd62b869a3dfa883ba65df9852f68662c027f9a9432d86bfac', 'librarian', 'Central Library'),
 (3, 'John Doe', 'john.doe@student.edu', 'scrypt:32768:8:1$upETmHDvdkUM8cUd$ddb5e2fc9af5c73254ebbec67a979d2d3b581cd0ab2f4931e0b4ede525c824759b02c3bd845db6293872444d420a11a2d6b5995d0751478a2fcab58a7e88aabb', 'member', 'Computer Science'),
 (4, 'Alice Smith', 'alice.smith@student.edu', 'scrypt:32768:8:1$upETmHDvdkUM8cUd$ddb5e2fc9af5c73254ebbec67a979d2d3b581cd0ab2f4931e0b4ede525c824759b02c3bd845db6293872444d420a11a2d6b5995d0751478a2fcab58a7e88aabb', 'member', 'Information Technology');
